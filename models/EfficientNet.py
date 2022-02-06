@@ -163,10 +163,13 @@ class EffictiveNet(nn.Module):
 
 
 if __name__ == "__main__":
+    from torchsummary import summary
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    model = EffictiveNet("efficientnet-b0", num_classes=10)
+    version = "efficientnet-b0"
+    model = EffictiveNet(version, num_classes=1000)
     model = model.to(device)
-    phi, res, drop_rate = phi_values["efficientnet-b0"]
+    phi, res, drop_rate = phi_values[version] 
+    summary(model, (3, res, res))
     x = torch.randn(32, 3, res, res).to(device)
     y = model(x)
-    print(y.size())
+    print(y.size()) # (32, 1000)
